@@ -39,18 +39,16 @@ def output_config():
 def output_values():
     now = datetime.now()
     date_string = now.strftime("%d.%m.%y")
-    file_name = join(EXCEL_DUMP_PATH,  date_string + ".xlsx")
 
-    if not exists(file_name):
-        files = list(filter(isfile, glob.glob(EXCEL_DUMP_PATH + "*.xlsx")))
-        files.sort(key=lambda x: getmtime(x))
-        if len(files) > 0:
-            file_name = files[0]
-    wb = load_workbook(file_name)
-    ws = wb[wb.sheetnames[1]]
-    for index, state in enumerate(states):
-        vaccinations = ws["B{}".format(index + 2)].value
-        print("de_{}.value {}".format(index, vaccinations))
+    files = list(filter(isfile, glob.glob(EXCEL_DUMP_PATH + "*.xlsx")))
+    files.sort(key=lambda x: getmtime(x))
+    if len(files) > 0:
+        file_name = files[-1]
+        wb = load_workbook(file_name)
+        ws = wb[wb.sheetnames[1]]
+        for index, state in enumerate(states):
+            vaccinations = ws["B{}".format(index + 2)].value
+            print("de_{}.value {}".format(index, vaccinations))
 
 
 if len(argv) == 2 and argv[1] == "config":
